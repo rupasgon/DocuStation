@@ -34,12 +34,22 @@ public class FuncionesUsers {
     private final String SQL_DELETE = "DELETE FROM t_users WHERE id_user=?";
     private final String SQL_SELECT = "SELECT id_user, name, surname, mail FROM t_users ORDER BY id_user";
     
+    private java.sql.Connection userConn;
+    
     public FuncionesUsers(){
         init();
+        
     }
     
-    public int insert(String name, String surname, String mail, String pass){
+    public FuncionesUsers(Connection conn){
         init();
+        this.userConn = conn;
+    }
+    
+    
+    public int insert(String name, String surname, String mail, String pass) throws SQLException{
+        //init();
+        
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -49,7 +59,8 @@ public class FuncionesUsers {
         
         try {
             
-            conn = ConexionMySQL.getConnection(this.url,this.user,this.passwd);
+            conn = (this.userConn != null) ? this.userConn : 
+            ConexionMySQL.getConnection(this.url,this.user,this.passwd);
             stmt = conn.prepareStatement(SQL_INSERT);
             int index = 1;
             
@@ -61,22 +72,20 @@ public class FuncionesUsers {
             rows = stmt.executeUpdate();
             System.out.println("Registros afectados: " + rows);
             
-        } catch (SQLException e) {
-            
-            e.printStackTrace();
-            
         }finally{
             
            ConexionMySQL.close(stmt);
-           ConexionMySQL.close(conn);
-            
+           
+           if(conn == null){
+              ConexionMySQL.close(conn);
+           }
         }
         
     return rows;
         
     }
     
-    public int update(int id_user){
+    public int update(int id_user) throws SQLException{
         
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -84,7 +93,8 @@ public class FuncionesUsers {
         
         try {
             
-            conn = ConexionMySQL.getConnection(this.url,this.user,this.passwd);
+            conn = (this.userConn != null) ? this.userConn :
+            ConexionMySQL.getConnection(this.url,this.user,this.passwd);
             System.out.println("Ejecutando query: " + SQL_UPDATE);
             stmt = conn.prepareStatement(SQL_UPDATE);
             int index = 1;
@@ -94,14 +104,14 @@ public class FuncionesUsers {
             System.out.println("Registros actualizados: " + rows);
             
             
-        } catch (SQLException e) {
-            
-            e.printStackTrace();
-            
         }finally{
             
             ConexionMySQL.close(stmt);
+            
+            if(conn == null){
+            
             ConexionMySQL.close(conn);
+            }
             
         }
         
@@ -109,35 +119,36 @@ public class FuncionesUsers {
         
     }
     
-    public int delete(int id_user){
+    public int delete(int id_user)throws SQLException{
         
         Connection conn = null;
         PreparedStatement stmt = null;
         int rows = 0;
         try {
             
-            conn = ConexionMySQL.getConnection(this.url,this.user,this.passwd);
+            conn = (this.userConn != null) ? this.userConn : 
+            ConexionMySQL.getConnection(this.url,this.user,this.passwd);
             System.out.println("Ejecutando la query: " + SQL_DELETE);
             stmt = conn.prepareStatement(SQL_DELETE);
             stmt.setInt(1, id_user);
             rows = stmt.executeUpdate();
             System.out.println("Registros eliminados: " + rows);
             
-        } catch (Exception e) {
-            
-            e.printStackTrace();
-            
         }finally{
             
             ConexionMySQL.close(stmt);
+            
+            if(conn == null){
+            
             ConexionMySQL.close(conn);
+            }
             
         }
         
         return rows;
     }
     
-    public List<User> select(){
+    public List<User> select() throws SQLException{
         
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -149,7 +160,8 @@ public class FuncionesUsers {
         
         try {
             
-            conn = ConexionMySQL.getConnection(this.url,this.user,this.passwd);
+            conn = (this.userConn != null) ? this.userConn :
+            ConexionMySQL.getConnection(this.url,this.user,this.passwd);
             stmt = conn.prepareStatement(SQL_SELECT);
             rs = stmt.executeQuery();
             while(rs.next()){
@@ -171,13 +183,15 @@ public class FuncionesUsers {
                 
             }
             
-        } catch (Exception e) {
-            
-            e.printStackTrace();
         }finally{
             
+            ConexionMySQL.close(rs);
             ConexionMySQL.close(stmt);
+            
+            if(conn == null){
+            
             ConexionMySQL.close(conn);
+            }
             
         }
         

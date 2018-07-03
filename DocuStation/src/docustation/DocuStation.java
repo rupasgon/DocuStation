@@ -19,16 +19,9 @@ public class DocuStation {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        FuncionesUsers f1 = new FuncionesUsers();
         
-        for(int i=1;i<=3;i++){
-            
-        //System.out.println(i);
-            
-       f1.insert("Usuario"+i, "Usuario"+i, "usuario"+i+"@prueba.com", "Prueba2018");
-       
-       
-        }
+        
+
         
     }
     
