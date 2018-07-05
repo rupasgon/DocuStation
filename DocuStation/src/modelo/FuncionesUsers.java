@@ -46,6 +46,22 @@ public class FuncionesUsers {
         this.userConn = conn;
     }
     
+    public Connection getConnection(Connection conn){
+       
+       try{
+           
+           conn = ConexionMySQL.getConnection(this.url, this.user, this.passwd);
+           
+       }catch(SQLException e){
+           
+           e.printStackTrace();
+           
+       }
+       
+       return conn;
+        
+    }
+    
     
     public int insert(String name, String surname, String mail, String pass) throws SQLException{
         //init();
@@ -213,7 +229,8 @@ public class FuncionesUsers {
 	    this.user = prop.getProperty("user");
 	    this.passwd = prop.getProperty("passwd");
             
-            this.url = "jdbc:mysql://"+this.host+":"+this.port+"/"+this.dbname+"?use=false";
+            //this.url = "jdbc:mysql://"+this.host+":"+this.port+"/"+this.dbname+"?use=false";
+            this.url = "jdbc:mariadb://"+this.host+":"+this.port+"/"+this.dbname+"?use=false";
             
             
         }catch (IOException e){

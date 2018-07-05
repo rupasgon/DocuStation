@@ -5,6 +5,8 @@
  */
 package docustation;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import modelo.FuncionesUsers;
 
 /**
@@ -18,6 +20,39 @@ public class DocuStation {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        
+        Connection conn = null;
+        FuncionesUsers f1 = new FuncionesUsers();
+        
+        try{
+            
+            conn = f1.getConnection(conn);
+            
+            if(conn.getAutoCommit()){
+                
+                conn.setAutoCommit(false);
+                
+            }
+            
+            FuncionesUsers fuWithOutAutocommit = new FuncionesUsers(conn);
+            
+            fuWithOutAutocommit.insert("Miguel", "Tablero", "miguel.tablero@gmail.com", "Prueba2018");
+            
+            
+        }catch(SQLException e){
+            
+            //e.printStackTrace();
+            //e.getErrorCode();
+            e.getCause();
+            
+        }
+        
+        
+        
+        
+        
+        
         
         
         

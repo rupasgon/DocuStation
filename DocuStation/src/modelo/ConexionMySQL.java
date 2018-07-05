@@ -5,15 +5,12 @@
  */
 package modelo;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  *
@@ -21,7 +18,8 @@ import java.util.Properties;
  */
 public class ConexionMySQL {
     
-    private static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    //private static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    private static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
     private static Driver driver = null;
     
     /*
